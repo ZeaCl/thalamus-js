@@ -300,9 +300,32 @@ var AdminAPI = class {
     const json = await res.json();
     return json.data ?? json;
   }
+  /** List all agents (users with is_agent === true) */
+  async listAgents() {
+    const users = await this.listUsers();
+    return users.filter((u) => u.is_agent === true);
+  }
   /** Get a single user */
   async getUser(id) {
     const res = await this.request(`${this.baseUrl}/api/users/${id}`);
+    const json = await res.json();
+    return json.data ?? json;
+  }
+  /** Update a user (only name and agent_config are writable) */
+  async updateUser(id, data) {
+    const res = await this.request(`${this.baseUrl}/api/users/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ user: data })
+    });
+    const json = await res.json();
+    return json.data ?? json;
+  }
+  /** Create a user */
+  async createUser(data) {
+    const res = await this.request(`${this.baseUrl}/api/users`, {
+      method: "POST",
+      body: JSON.stringify({ user: data })
+    });
     const json = await res.json();
     return json.data ?? json;
   }

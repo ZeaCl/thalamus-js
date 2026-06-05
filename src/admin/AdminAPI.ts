@@ -5,16 +5,18 @@
  * Requires JWT Bearer token authentication.
  */
 
-import type { ThalamusConfig, ThalamusError } from '../types'
+import type { ThalamusConfig, ThalamusError, AgentConfig, MCPServerConfig } from '../types'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-export interface AdminUser {
+export interface User {
   id: string
   name: string
   email: string
   status: string
   organization_id?: string
+  is_agent: boolean
+  agent_config?: AgentConfig
 }
 
 export interface AdminOrganization {
@@ -57,15 +59,47 @@ export class AdminAPI {
   // ── Users ────────────────────────────────────────────────────────────────
 
   /** List all users */
-  async listUsers(): Promise<AdminUser[]> {
+  async listUsers(): Promise<User[]> {
     const res = await this.request(`${this.baseUrl}/api/users`)
     const json: any = await res.json()
     return json.data ?? json
   }
 
+  /** List all agents (users with is_agent === true) */
+  async listAgents(): Promise<User[]> {
+    const users = await this.listUsers()
+    return users.filter((u) => u.is_agent === true)
+  }
+
   /** Get a single user */
-  async getUser(id: string): Promise<AdminUser> {
+  async getUser(id: string): Promise<User> {
     const res = await this.request(`${this.baseUrl}/api/users/${id}`)
+    const json: any = await res.json()
+    return json.data ?? json
+  }
+
+  /** Update a user (only name and agent_config are writable) */
+  async updateUser(id: string, data: Partial<Pick<User, 'name' | 'agent_config'>>): Promise<User> {
+    const res = await this.request(`${this.baseUrl}/api/users/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ user: data }),
+    })
+    const json: any = await res.json()
+    return json.data ?? json
+  }
+
+  /** Create a user */
+  async createUser(data: {
+    email: string
+    password: string
+    name?: string
+    is_agent?: boolean
+    agent_config?: AgentConfig
+  }): Promise<User> {
+    const res = await this.request(`${this.baseUrl}/api/users`, {
+      method: 'POST',
+      body: JSON.stringify({ user: data }),
+    })
     const json: any = await res.json()
     return json.data ?? json
   }

@@ -21,15 +21,21 @@ export type {
   ClientCredentialsOptions,
   RefreshTokenOptions,
   ThalamusError,
+  AgentConfig,
+  MCPServerConfig,
+  CustomSkill,
 } from './types'
 
 export type {
-  AdminUser,
+  User,
   AdminOrganization,
   AdminRole,
   DomainRole,
   EffectiveScopes,
 } from './admin/AdminAPI'
+
+// Alias for backward compatibility
+export type { User as AdminUser } from './admin/AdminAPI'
 
 // Default export
 export { ThalamusClient as default } from './ThalamusClient'

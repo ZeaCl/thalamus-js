@@ -87,3 +87,32 @@ export interface ThalamusError extends Error {
   error?: string
   error_description?: string
 }
+
+// ── Agent types ──────────────────────────────────────────────────────────
+
+export interface MCPServerConfig {
+  name: string
+  type: 'cli' | 'url' | 'sse'
+  /** Executable command (for type: cli) */
+  command?: string
+  /** Server URL (for type: url, sse) */
+  url?: string
+  /** Glob patterns to filter which tools are exposed. ["*"] = all, ["venture_*"] = filtered */
+  tools_filter?: string[]
+  enabled: boolean
+}
+
+export interface AgentConfig {
+  system_prompt?: string
+  skills?: string[]
+  icon?: string
+  model?: string
+  mcp_servers?: MCPServerConfig[]
+  custom_skills?: CustomSkill[]
+}
+
+export interface CustomSkill {
+  name: string
+  description: string
+  body: string
+}

@@ -77,6 +77,30 @@ interface ThalamusError extends Error {
     error?: string;
     error_description?: string;
 }
+interface MCPServerConfig {
+    name: string;
+    type: 'cli' | 'url' | 'sse';
+    /** Executable command (for type: cli) */
+    command?: string;
+    /** Server URL (for type: url, sse) */
+    url?: string;
+    /** Glob patterns to filter which tools are exposed. ["*"] = all, ["venture_*"] = filtered */
+    tools_filter?: string[];
+    enabled: boolean;
+}
+interface AgentConfig {
+    system_prompt?: string;
+    skills?: string[];
+    icon?: string;
+    model?: string;
+    mcp_servers?: MCPServerConfig[];
+    custom_skills?: CustomSkill[];
+}
+interface CustomSkill {
+    name: string;
+    description: string;
+    body: string;
+}
 
 /**
  * OAuth2 Authentication Module
@@ -213,12 +237,14 @@ declare class TokenManager {
  * Requires JWT Bearer token authentication.
  */
 
-interface AdminUser {
+interface User {
     id: string;
     name: string;
     email: string;
     status: string;
     organization_id?: string;
+    is_agent: boolean;
+    agent_config?: AgentConfig;
 }
 interface AdminOrganization {
     id: string;
@@ -249,9 +275,21 @@ declare class AdminAPI {
     constructor(config: ThalamusConfig);
     private get baseUrl();
     /** List all users */
-    listUsers(): Promise<AdminUser[]>;
+    listUsers(): Promise<User[]>;
+    /** List all agents (users with is_agent === true) */
+    listAgents(): Promise<User[]>;
     /** Get a single user */
-    getUser(id: string): Promise<AdminUser>;
+    getUser(id: string): Promise<User>;
+    /** Update a user (only name and agent_config are writable) */
+    updateUser(id: string, data: Partial<Pick<User, 'name' | 'agent_config'>>): Promise<User>;
+    /** Create a user */
+    createUser(data: {
+        email: string;
+        password: string;
+        name?: string;
+        is_agent?: boolean;
+        agent_config?: AgentConfig;
+    }): Promise<User>;
     /** Get an organization */
     getOrganization(id: string): Promise<AdminOrganization>;
     /** List all organizations */
@@ -347,4 +385,4 @@ declare class ThalamusClient {
     getConfig(): Readonly<ThalamusConfig>;
 }
 
-export { AdminAPI, type AdminOrganization, type AdminRole, type AdminUser, type AuthorizationUrlOptions, type ClientCredentialsOptions, type DomainRole, type EffectiveScopes, type IntrospectionResponse, OAuth2, type RefreshTokenOptions, ThalamusClient, type ThalamusConfig, type ThalamusError, type TokenExchangeOptions, TokenManager, type TokenResponse, type UserInfo, ThalamusClient as default };
+export { AdminAPI, type AdminOrganization, type AdminRole, type User as AdminUser, type AgentConfig, type AuthorizationUrlOptions, type ClientCredentialsOptions, type CustomSkill, type DomainRole, type EffectiveScopes, type IntrospectionResponse, type MCPServerConfig, OAuth2, type RefreshTokenOptions, ThalamusClient, type ThalamusConfig, type ThalamusError, type TokenExchangeOptions, TokenManager, type TokenResponse, type User, type UserInfo, ThalamusClient as default };
