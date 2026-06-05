@@ -3,7 +3,6 @@ node_modules/
 package-lock.json
 
 # Build output
-dist/
 
 # Environment
 .env
@@ -31,3 +30,4 @@ yarn-error.log*
 
 # Misc
 .cache/
+
