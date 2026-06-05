@@ -1,6 +1,6 @@
 {
   "name": "@zea.cl/thalamus-js",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Official JavaScript/TypeScript SDK for ZEA Thalamus OAuth2 Server",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -30,12 +30,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/chinostroza/thalamus-js"
+    "url": "https://github.com/zeacl/thalamus-js"
   },
   "bugs": {
-    "url": "https://github.com/chinostroza/thalamus-js/issues"
+    "url": "https://github.com/zeacl/thalamus-js/issues"
   },
-  "homepage": "https://github.com/chinostroza/thalamus-js#readme",
+  "homepage": "https://github.com/zeacl/thalamus-js#readme",
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^20.10.0",
