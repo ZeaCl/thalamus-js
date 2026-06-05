@@ -27,6 +27,7 @@
 
 import { OAuth2 } from './auth/OAuth2'
 import { TokenManager } from './tokens/TokenManager'
+import { AdminAPI } from './admin/AdminAPI'
 import type { ThalamusConfig } from './types'
 
 export class ThalamusClient {
@@ -35,6 +36,9 @@ export class ThalamusClient {
 
   /** Token management and introspection */
   public readonly tokens: TokenManager
+
+  /** Admin API — users, orgs, roles, domain management */
+  public readonly admin: AdminAPI
 
   private readonly config: ThalamusConfig
 
@@ -61,6 +65,7 @@ export class ThalamusClient {
     this.config = config
     this.auth = new OAuth2(config)
     this.tokens = new TokenManager(config)
+    this.admin = new AdminAPI(config)
   }
 
   /**
