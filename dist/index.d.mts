@@ -280,6 +280,10 @@ declare class AdminAPI {
     listAgents(): Promise<User[]>;
     /** Get a single user */
     getUser(id: string): Promise<User>;
+    /** Add a member to an organization */
+    addOrgMember(orgId: string, userId: string): Promise<{
+        message: string;
+    }>;
     /** Update a user (only name and agent_config are writable) */
     updateUser(id: string, data: Partial<Pick<User, 'name' | 'agent_config'>>): Promise<User>;
     /** Create a user */

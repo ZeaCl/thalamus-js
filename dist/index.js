@@ -311,6 +311,14 @@ var AdminAPI = class {
     const json = await res.json();
     return json.data ?? json;
   }
+  /** Add a member to an organization */
+  async addOrgMember(orgId, userId) {
+    const res = await this.request(`${this.baseUrl}/api/organizations/${orgId}/members`, {
+      method: "POST",
+      body: JSON.stringify({ user_id: userId })
+    });
+    return res.json();
+  }
   /** Update a user (only name and agent_config are writable) */
   async updateUser(id, data) {
     const res = await this.request(`${this.baseUrl}/api/users/${id}`, {

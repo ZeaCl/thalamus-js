@@ -78,6 +78,15 @@ export class AdminAPI {
     return json.data ?? json
   }
 
+  /** Add a member to an organization */
+  async addOrgMember(orgId: string, userId: string): Promise<{ message: string }> {
+    const res = await this.request(`${this.baseUrl}/api/organizations/${orgId}/members`, {
+      method: 'POST',
+      body: JSON.stringify({ user_id: userId }),
+    })
+    return res.json() as Promise<{ message: string }>
+  }
+
   /** Update a user (only name and agent_config are writable) */
   async updateUser(id: string, data: Partial<Pick<User, 'name' | 'agent_config'>>): Promise<User> {
     const res = await this.request(`${this.baseUrl}/api/users/${id}`, {
